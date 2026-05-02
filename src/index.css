@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --primary: #38bdf8;
+  --secondary: #6366f1;
+}
+
+.light {
+  --primary: #90cb42;
+  --secondary: #059849;
+}
+
+.dark {
+  --primary: #38bdf8;
+  --secondary: #6366f1;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-slate-900: #0f172a;
+  --color-slate-800: #1e293b;
+  --color-slate-400: #94a3b8;
+  --color-slate-50: #f8fafc;
+}
+
+@layer base {
+  body {
+    @apply font-sans transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-slate-900 text-slate-50;
+  }
+  
+  .light body {
+    @apply bg-slate-50 text-slate-900;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold;
+  }
+}
+
+.glass {
+  @apply transition-all duration-300;
+  backdrop-filter: blur(12px);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(5, 152, 73, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.hero-bg-gradient {
+  @apply transition-all duration-500;
+}
+
+
+
+.text-gradient {
+  @apply text-primary;
+}
+
+/* CMS Content Styling */
+.markdown-body {
+  font-size: 20px !important;
+}
+
+.markdown-body p {
+  font-size: 20px !important;
+  margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+
+.markdown-body p:empty {
+  display: none;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-slate-900);
+}
+
+.dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3 {
+  color: #ffffff;
+}
+
+.markdown-body h1 { font-size: 2.25rem; font-weight: 800; }
+.markdown-body h2 { font-size: 1.875rem; font-weight: 700; }
+.markdown-body h3 { font-size: 1.5rem; font-weight: 700; }
+.markdown-body ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+.markdown-body ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+.markdown-body strong { font-weight: 700; }
