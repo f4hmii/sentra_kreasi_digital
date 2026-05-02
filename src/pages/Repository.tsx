@@ -1,12 +1,56 @@
 import { motion } from 'motion/react';
-import { ExternalLink, ArrowRight, Search, Layers, Zap, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowRight, Search, Layers, Zap, ShieldCheck } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { templates } from '../data/templates';
+import { fetchPages } from '../services/cmsApi';
+
+export interface CanvaTemplate {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+  description: string;
+  canvaUrl: string;
+}
 
 const Repository = () => {
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [templates, setTemplates] = useState<CanvaTemplate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        const pages = await fetchPages();
+        const repoPage = pages.find(p => p.slug === 'repository' && p.status === 'published');
+        
+        if (repoPage && repoPage.content) {
+          const content = repoPage.content;
+          const galleries = content.filter(c => c.type === 'gallery');
+          const ctas = content.filter(c => c.type === 'cta-banner');
+
+          const parsedTemplates: CanvaTemplate[] = galleries.map((gallery, index) => {
+            const cta = ctas.find(c => c.data?.headline === gallery.data?.title) || ctas[index];
+            return {
+              id: gallery.id,
+              title: gallery.data?.title || 'Template Tanpa Judul',
+              category: gallery.data?.subtitle || 'Lainnya',
+              image: gallery.data?.images?.[0]?.url || 'https://via.placeholder.com/800x600?text=No+Image',
+              description: cta?.data?.sub_headline || '',
+              canvaUrl: cta?.data?.button_link || '#',
+            };
+          });
+          setTemplates(parsedTemplates);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil data repository:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadTemplates();
+  }, []);
 
   const categories = [
     { id: 'all', label: 'Semua' },
@@ -116,7 +160,13 @@ const Repository = () => {
           </div>
         </div>
 
-        {/* Templates Grid */}
+        {isLoading ? (
+          <div className="flex justify-center items-center py-32">
+            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <>
+            {/* Templates Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredTemplates.map((template, i) => (
             <motion.div
@@ -127,7 +177,7 @@ const Repository = () => {
               transition={{ duration: 0.4 }}
               className="group"
             >
-              <Link to={`/repository/${template.id}`} className="block relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl">
+              <Link to={`/repository/${template.id}`} className="block relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl mb-6">
                 <img 
                   src={template.image} 
                   alt={template.title}
@@ -136,14 +186,7 @@ const Repository = () => {
                 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm">
-                  <h4 className="text-xl font-bold text-white mb-2 leading-tight">
-                    {template.title}
-                  </h4>
-                  <p className="text-primary text-base uppercase tracking-widest font-black">
-                    {template.category}
-                  </p>
-                  
-                  <div className="mt-8 flex items-center gap-2 text-base font-black uppercase tracking-widest text-white hover:text-primary transition-colors">
+                  <div className="flex items-center gap-2 text-base font-black uppercase tracking-widest text-white group-hover:text-primary transition-colors">
                     Lihat Detail <ArrowRight size={14} />
                   </div>
                 </div>
@@ -153,6 +196,17 @@ const Repository = () => {
                   <span className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white">{template.category}</span>
                 </div>
               </Link>
+
+              <div className="px-2 text-center">
+                <p className="text-primary text-xs uppercase tracking-widest font-black mb-2">
+                  {template.category}
+                </p>
+                <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                  <Link to={`/repository/${template.id}`} className="hover:text-primary transition-colors">
+                    {template.title}
+                  </Link>
+                </h4>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -162,6 +216,8 @@ const Repository = () => {
           <div className="text-center py-20">
             <p className="text-slate-500 font-light italic">Belum ada template dalam kategori ini.</p>
           </div>
+        )}
+        </>
         )}
       </div>
     </section>

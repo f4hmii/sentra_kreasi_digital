@@ -2,27 +2,71 @@ import { motion } from 'motion/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ExternalLink, ArrowRight, Tag } from 'lucide-react';
-import { templates, CanvaTemplate } from '../data/templates';
+import { fetchPages } from '../services/cmsApi';
+import { CanvaTemplate } from './Repository';
 
 const TemplateDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [template, setTemplate] = useState<CanvaTemplate | null>(null);
   const [recommendations, setRecommendations] = useState<CanvaTemplate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const currentTemplate = templates.find(t => t.id === id);
-    if (currentTemplate) {
-      setTemplate(currentTemplate);
-      // Get 3 random recommendations excluding current
-      const others = templates.filter(t => t.id !== id);
-      const shuffled = [...others].sort(() => 0.5 - Math.random());
-      setRecommendations(shuffled.slice(0, 3));
-      window.scrollTo(0, 0);
-    } else {
-      navigate('/repository');
-    }
+    const loadData = async () => {
+      try {
+        const pages = await fetchPages();
+        const repoPage = pages.find(p => p.slug === 'repository' && p.status === 'published');
+        
+        if (repoPage && repoPage.content) {
+          const content = repoPage.content;
+          const galleries = content.filter(c => c.type === 'gallery');
+          const ctas = content.filter(c => c.type === 'cta-banner');
+
+          const parsedTemplates: CanvaTemplate[] = galleries.map((gallery, index) => {
+            const cta = ctas.find(c => c.data?.headline === gallery.data?.title) || ctas[index];
+            return {
+              id: gallery.id,
+              title: gallery.data?.title || 'Template Tanpa Judul',
+              category: gallery.data?.subtitle || 'Lainnya',
+              image: gallery.data?.images?.[0]?.url || 'https://via.placeholder.com/800x600?text=No+Image',
+              description: cta?.data?.sub_headline || '',
+              canvaUrl: cta?.data?.button_link || '#',
+            };
+          });
+
+          const currentTemplate = parsedTemplates.find(t => t.id === id);
+          if (currentTemplate) {
+            setTemplate(currentTemplate);
+            const others = parsedTemplates.filter(t => t.id !== id);
+            const shuffled = [...others].sort(() => 0.5 - Math.random());
+            setRecommendations(shuffled.slice(0, 3));
+            window.scrollTo(0, 0);
+          } else {
+            navigate('/repository');
+          }
+        } else {
+            navigate('/repository');
+        }
+      } catch (error) {
+        console.error("Gagal mengambil detail template:", error);
+        navigate('/repository');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
   }, [id, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex justify-center items-center">
+        <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!template) return null;
 
   if (!template) return null;
 
