@@ -119,7 +119,7 @@ const Repository = () => {
                 {feature.icon}
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{feature.title}</h3>
-              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
+              <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-light">
                 {feature.desc}
               </p>
             </motion.div>
@@ -198,7 +198,7 @@ const Repository = () => {
               </Link>
 
               <div className="px-2 text-center">
-                <p className="text-primary text-xs uppercase tracking-widest font-black mb-2">
+                <p className="text-primary text-lg uppercase tracking-widest font-black mb-2">
                   {template.category}
                 </p>
                 <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
@@ -214,7 +214,7 @@ const Repository = () => {
         {/* Empty State */}
         {filteredTemplates.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-slate-500 font-light italic">Belum ada template dalam kategori ini.</p>
+            <p className="text-slate-500 text-lg font-light italic">Belum ada template dalam kategori ini.</p>
           </div>
         )}
         </>

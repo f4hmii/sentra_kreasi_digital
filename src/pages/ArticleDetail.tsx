@@ -127,7 +127,7 @@ const ArticleDetail = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="prose prose-slate dark:prose-invert prose-sky max-w-none"
+          className="prose prose-lg prose-slate dark:prose-invert prose-sky max-w-none"
         >
           <div className="markdown-body text-justify" dangerouslySetInnerHTML={{ __html: bodyContent }}>
           </div>
@@ -140,8 +140,8 @@ const ArticleDetail = () => {
                 <User size={24} className="text-slate-400" />
              </div>
              <div>
-                <p className="text-base text-slate-500 font-bold uppercase tracking-widest">Penulis</p>
-                <p className="text-slate-900 dark:text-white font-bold">Tim Sentra Kreasi</p>
+                <p className="text-lg text-slate-500 font-bold uppercase tracking-widest">Penulis</p>
+                <p className="text-slate-900 dark:text-white text-lg font-bold">Tim Sentra Kreasi</p>
              </div>
           </div>
         </div>

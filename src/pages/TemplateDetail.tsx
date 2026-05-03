@@ -129,7 +129,7 @@ const TemplateDetail = () => {
               >
                 Gunakan Template <ExternalLink size={20} />
               </a>
-              <p className="mt-4 text-slate-500 text-base italic">
+              <p className="mt-4 text-slate-500 text-lg italic">
                 *Tautan ini akan mengarahkan Anda langsung ke platform Canva.
               </p>
             </div>
@@ -141,7 +141,7 @@ const TemplateDetail = () => {
           <div className="flex items-end justify-between mb-12">
             <div>
               <h2 className="text-3xl font-display font-black text-slate-900 dark:text-white mb-2">Rekomendasi Lainnya</h2>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">Pilih desain lain yang mungkin sesuai dengan UMKM Anda.</p>
+              <p className="text-slate-600 dark:text-slate-400 text-lg">Pilih desain lain yang mungkin sesuai dengan UMKM Anda.</p>
             </div>
           </div>
 
@@ -165,7 +165,7 @@ const TemplateDetail = () => {
                   </div>
                 </div>
                 <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">{rec.title}</h4>
-                <p className="text-slate-500 text-base uppercase tracking-widest mt-1">{rec.category}</p>
+                <p className="text-slate-500 text-lg uppercase tracking-widest mt-1">{rec.category}</p>
               </Link>
             ))}
           </div>

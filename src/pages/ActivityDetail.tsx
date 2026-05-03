@@ -163,7 +163,7 @@ const ActivityDetail = () => {
             >
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 relative z-10">Ingin Mengajak Kolaborasi?</h3>
-              <p className="text-slate-600 dark:text-slate-400 text-sm mb-8 relative z-10 font-light leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-lg mb-8 relative z-10 font-light leading-relaxed">
                 Kami selalu terbuka untuk ide-ide baru dan kolaborasi yang membawa dampak positif. Hubungi kami untuk mendiskusikan rencana Anda.
               </p>
               <Link 
@@ -195,7 +195,7 @@ const ActivityDetail = () => {
                       <img src={otherImage} alt={other.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div className="flex flex-col justify-center">
-                      <p className="text-base text-primary font-black uppercase tracking-widest mb-1">{otherDate}</p>
+                      <p className="text-lg text-primary font-black uppercase tracking-widest mb-1">{otherDate}</p>
                       <h5 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
                         {other.title}
                       </h5>

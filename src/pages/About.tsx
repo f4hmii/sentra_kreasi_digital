@@ -66,7 +66,7 @@ const About = () => {
 
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-24 px-6 overflow-hidden z-10">
+      <section className="relative pt-12 pb-12 px-6 overflow-hidden z-10">
         <div className="max-w-7xl mx-auto relative">
           <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             <motion.div 
@@ -82,7 +82,7 @@ const About = () => {
                 {firstPart} {lastWord && <span className="text-gradient">{lastWord}</span>}
                 {!lastWord && <span className="text-gradient">{firstPart}</span>}
               </h1>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-light">
+              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
                 {subHeadline}
               </p>
               
@@ -110,7 +110,7 @@ const About = () => {
 
 
       {/* What We Do Section */}
-      <section className="py-32 px-6">
+      <section className="pt-16 pb-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <div className="inline-block px-3 py-1 glass rounded-full mb-6">
@@ -156,7 +156,7 @@ const About = () => {
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
                   {service.title}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                   {service.desc}
                 </p>
               </motion.div>
@@ -166,7 +166,7 @@ const About = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-32 px-6 bg-slate-100/50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-white/5">
+      <section className="pt-16 pb-32 px-6 bg-slate-100/50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20 max-w-3xl mx-auto">
             <div className="inline-block px-3 py-1 glass rounded-full mb-6">
@@ -214,11 +214,11 @@ const About = () => {
                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-primary text-base font-black uppercase tracking-widest">
+                    <p className="text-primary text-lg font-black uppercase tracking-widest">
                       {member.role}
                     </p>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed font-light">
+                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-light">
                     {member.desc}
                   </p>
                 </div>
@@ -247,7 +247,7 @@ const About = () => {
             </motion.div>
 
             <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-4">Full Team</h3>
-            <p className="text-slate-600 dark:text-slate-400 text-sm max-w-2xl mx-auto font-light leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
               Kampung Digital Sentra Kreasi dipimpin oleh tim pengurus inti yang berdedikasi untuk memberdayakan.
             </p>
           </div>
@@ -307,11 +307,11 @@ const About = () => {
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-primary/70 text-base font-black uppercase tracking-widest">
+                    <p className="text-primary/70 text-lg font-black uppercase tracking-widest">
                       {member.role}
                     </p>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light min-h-[60px]">
+                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-light min-h-[60px]">
                     {member.desc}
                   </p>
                 </div>

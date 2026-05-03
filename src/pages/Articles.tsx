@@ -62,7 +62,7 @@ const Articles = () => {
           <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
             Wawasan & Ide <span className="text-gradient">Kreatif</span>
           </h2>
-          <p className="mt-6 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light">
+          <p className="mt-6 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light">
             Kumpulan pemikiran dan berita terbaru seputar perkembangan teknologi di tingkat komunitas kampung.
           </p>
         </div>
@@ -124,7 +124,7 @@ const Articles = () => {
                       </h3>
                     </Link>
                     
-                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2 max-w-3xl">
+                    <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed line-clamp-2 max-w-3xl">
                       {articleExcerpt}
                     </p>
 

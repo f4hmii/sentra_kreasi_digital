@@ -90,7 +90,7 @@ const Activities = () => {
           <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
             {renderHeadline(heroData.headline)}
           </h2>
-          <p className="mt-6 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light">
+          <p className="mt-6 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light">
             {heroData.sub_headline}
           </p>
         </div>

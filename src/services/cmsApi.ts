@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 // src/services/cmsApi.ts
 
 const API_BASE_URL = import.meta.env.VITE_CMS_API_URL;

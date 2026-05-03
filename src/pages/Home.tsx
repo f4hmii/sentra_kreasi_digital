@@ -124,7 +124,7 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
               {/* Text Side */}
               <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
                 <div>
-                  <p className="text-primary text-base font-black uppercase tracking-widest mb-3">{tagline}</p>
+                  <p className="text-primary text-lg font-black uppercase tracking-widest mb-3">{tagline}</p>
                   <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-6">
                     {product.title}
                   </h3>
@@ -135,13 +135,13 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
                   {features.map((feature: any, idx: number) => (
                     <div key={idx} className="space-y-2">
                       <h4 className="text-slate-900 dark:text-white font-bold text-sm tracking-tight">{feature.label}</h4>
-                      <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">{feature.value}</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">{feature.value}</p>
                     </div>
                   ))}
                 </div>
 
                 {footer && (
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed border-l-2 border-primary/20 pl-6 italic max-w-lg mx-auto lg:mx-0">
+                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed border-l-2 border-primary/20 pl-6 italic max-w-lg mx-auto lg:mx-0">
                     {footer}
                   </p>
                 )}
@@ -216,7 +216,7 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
                       {event.title}
                     </h2>
                   </Link>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed max-w-xl">
+                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-xl">
                     {eventExcerpt}
                   </p>
                   <Link to={`/kegiatan/${event.slug}`} className="text-primary text-base font-black uppercase tracking-widest flex items-center gap-2 py-2 group/btn">
@@ -260,7 +260,7 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">Alamat</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
                     Jl. Raya Banjaran Km 14 Gg. Kesehatan No 124 Kp. Sepen Rt 05 Rw 06 Desa Sukasari Kec. Pameungpeuk Kab. Bandung
                   </p>
                 </div>
@@ -289,7 +289,7 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">No Telepon</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">089611284382</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-lg">089611284382</p>
                 </div>
               </div>
 
@@ -299,13 +299,13 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">Email</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">sentrakreasibandung@gmail.com</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-lg">sentrakreasibandung@gmail.com</p>
                 </div>
               </div>
             </div>
 
             <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl">
-              <p className="text-primary text-base font-medium leading-relaxed italic">
+              <p className="text-primary text-lg font-medium leading-relaxed italic">
                 "Lokasi Kami: Jl. Raya Banjaran KM 14, Gg. Kesehatan No 124, RT 05/ RW 06, Desa Sukasari, Kec. Pameungpeuk Bandung"
               </p>
             </div>
