@@ -65,19 +65,15 @@ const ActivityDetail = () => {
   return (
     <section className="py-32 bg-slate-50 dark:bg-slate-900 min-h-screen">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Breadcrumbs / Back Link */}
+        {/* Back Link */}
         <motion.div
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
-           className="mb-12 flex items-center gap-3 text-base"
+           className="mb-12"
         >
-          <Link to="/kegiatan" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors font-bold uppercase tracking-widest px-2 py-1 -ml-2 rounded-lg hover:bg-primary/5">
-            Kegiatan
+          <Link to="/kegiatan" className="inline-flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-bold uppercase tracking-widest text-sm group">
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Kembali ke Semua Kegiatan
           </Link>
-          <ChevronRight size={14} className="text-slate-300 dark:text-slate-700" />
-          <span className="text-slate-400 dark:text-slate-600 font-bold uppercase tracking-widest truncate">
-            {activity.title}
-          </span>
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
@@ -207,20 +203,7 @@ const ActivityDetail = () => {
           </div>
         </div>
 
-        {/* Footer Navigation */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-32 pt-12 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8"
-        >
-          <Link to="/kegiatan" className="inline-flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-bold uppercase tracking-widest text-sm group">
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Kembali ke Semua Kegiatan
-          </Link>
-          <div className="flex gap-4">
-            {/* Share buttons or other actions could go here */}
-          </div>
-        </motion.div>
+
       </div>
     </section>
   );

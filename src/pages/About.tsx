@@ -144,21 +144,25 @@ const About = () => {
             {services.map((service, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="relative group space-y-6 text-center lg:text-left"
+                className="relative group p-8 md:p-10 bg-white dark:bg-slate-800/40 rounded-[2rem] border border-slate-200 dark:border-white/5 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2 transition-all duration-500 text-center lg:text-left flex flex-col h-full"
               >
-                <div className="w-16 h-16 glass rounded-2xl flex items-center justify-center mx-auto lg:mx-0 group-hover:bg-slate-100 dark:group-hover:bg-white/5 transition-all">
-                  {service.icon}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]"></div>
+                
+                <div className="relative z-10 space-y-6 flex-grow">
+                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto lg:mx-0 group-hover:scale-110 group-hover:bg-primary/20 group-hover:shadow-lg transition-all duration-500">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-light">
+                    {service.desc}
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {service.desc}
-                </p>
               </motion.div>
             ))}
           </div>
@@ -240,13 +244,13 @@ const About = () => {
                 <img 
                   src="https://images.ctfassets.net/cdbs9kaqj6a1/5riHWNGzs3ZCyySuFZXCuS/ecb5390b64948ce72cc4229633a72518/IMG-20241211-WA0013.jpg" 
                   alt="Full Team Sentra Kreasi" 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 dark:opacity-100"
+                  className="w-full h-full object-cover object-[50%_30%] transition-transform duration-1000 group-hover:scale-105 opacity-80 dark:opacity-100"
                 />
                 <div className="absolute inset-0 bg-slate-900/40"></div>
               </div>
             </motion.div>
 
-            <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white mb-4">Full Team</h3>
+            <h3 className="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-4">Full Team</h3>
             <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
               Kampung Digital Sentra Kreasi dipimpin oleh tim pengurus inti yang berdedikasi untuk memberdayakan.
             </p>

@@ -134,7 +134,7 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
                 <div className="grid sm:grid-cols-2 gap-8 py-4">
                   {features.map((feature: any, idx: number) => (
                     <div key={idx} className="space-y-2">
-                      <h4 className="text-slate-900 dark:text-white font-bold text-sm tracking-tight">{feature.label}</h4>
+                      <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">{feature.label}</h4>
                       <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">{feature.value}</p>
                     </div>
                   ))}
@@ -260,9 +260,14 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">Alamat</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+                  <a 
+                    href="https://maps.google.com/?q=-7.0145892,107.5794717"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
+                  >
                     Jl. Raya Banjaran Km 14 Gg. Kesehatan No 124 Kp. Sepen Rt 05 Rw 06 Desa Sukasari Kec. Pameungpeuk Kab. Bandung
-                  </p>
+                  </a>
                 </div>
               </div>
 
@@ -275,10 +280,10 @@ const FindUsSection = () => {
                   <a 
                     href="https://instagram.com/sentrakreasi.ukm" 
                     target="_blank" 
-                    rel="no-referrer"
-                    className="text-slate-600 dark:text-slate-400 text-sm hover:text-primary transition-colors"
+                    rel="noopener noreferrer"
+                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
                   >
-                    sentrakreasi.ukm
+                    @sentrakreasi.ukm
                   </a>
                 </div>
               </div>
@@ -289,7 +294,14 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">No Telepon</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-lg">089611284382</p>
+                  <a 
+                    href="https://wa.me/6289611284382"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
+                  >
+                    089611284382
+                  </a>
                 </div>
               </div>
 
@@ -299,7 +311,12 @@ const FindUsSection = () => {
                 </div>
                 <div>
                   <h4 className="text-slate-900 dark:text-white font-bold mb-2">Email</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-lg">sentrakreasibandung@gmail.com</p>
+                  <a 
+                    href="mailto:sentrakreasibandung@gmail.com"
+                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
+                  >
+                    sentrakreasibandung@gmail.com
+                  </a>
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowRight, Search, Layers, Zap, ShieldCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchPages } from '../services/cmsApi';
+import { fetchPosts } from '../services/cmsApi';
 
 export interface CanvaTemplate {
   id: string;
@@ -22,27 +22,21 @@ const Repository = () => {
   useEffect(() => {
     const loadTemplates = async () => {
       try {
-        const pages = await fetchPages();
-        const repoPage = pages.find(p => p.slug === 'repository' && p.status === 'published');
+        const posts = await fetchPosts();
+        const templatePosts = posts.filter(post => post.category === 'Template' && post.status === 'published');
         
-        if (repoPage && repoPage.content) {
-          const content = repoPage.content;
-          const galleries = content.filter(c => c.type === 'gallery');
-          const ctas = content.filter(c => c.type === 'cta-banner');
-
-          const parsedTemplates: CanvaTemplate[] = galleries.map((gallery, index) => {
-            const cta = ctas.find(c => c.data?.headline === gallery.data?.title) || ctas[index];
-            return {
-              id: gallery.id,
-              title: gallery.data?.title || 'Template Tanpa Judul',
-              category: gallery.data?.subtitle || 'Lainnya',
-              image: gallery.data?.images?.[0]?.url || 'https://via.placeholder.com/800x600?text=No+Image',
-              description: cta?.data?.sub_headline || '',
-              canvaUrl: cta?.data?.button_link || '#',
-            };
-          });
-          setTemplates(parsedTemplates);
-        }
+        const parsedTemplates: CanvaTemplate[] = templatePosts.map(post => {
+          const content = post.content?.[0] || {};
+          return {
+            id: post.id.toString(),
+            title: post.excerpt || content.excerpt || 'Template Tanpa Judul',
+            category: post.title || 'Lainnya',
+            image: content.featured_image || 'https://via.placeholder.com/800x600?text=No+Image',
+            description: content.short_description || '',
+            canvaUrl: content.cta?.[0]?.url || '#',
+          };
+        });
+        setTemplates(parsedTemplates);
       } catch (error) {
         console.error("Gagal mengambil data repository:", error);
       } finally {

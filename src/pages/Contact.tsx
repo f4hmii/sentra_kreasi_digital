@@ -1,10 +1,34 @@
-import { Mail, Phone, MapPin, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, CheckCircle2, XCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { fetchPages, CmsPage } from '../services/cmsApi';
 
 const Contact = () => {
   const [pageData, setPageData] = useState<CmsPage | null>(null);
   const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'invalid_email'>('idle');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('idle');
+
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 4000);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus('invalid_email');
+      setTimeout(() => setStatus('idle'), 4000);
+      return;
+    }
+
+    setStatus('success');
+    setFormData({ name: '', email: '', message: '' });
+    setTimeout(() => setStatus('idle'), 4000);
+  };
 
   useEffect(() => {
     const getPageData = async () => {
@@ -114,21 +138,69 @@ const Contact = () => {
             </div>
             
             <div className="glass p-8 md:p-12 rounded-3xl shadow-2xl relative bg-black/5 dark:bg-slate-800/40 flex flex-col">
-              <form className="space-y-6 flex flex-col h-full">
+              <form onSubmit={handleSubmit} className="space-y-6 flex flex-col h-full" noValidate>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-500 dark:text-slate-400 ml-1">Nama Lengkap</label>
-                    <input type="text" placeholder="John Doe" className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium" />
+                    <input 
+                      type="text" 
+                      placeholder="John Doe" 
+                      value={formData.name}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (status !== 'idle') setStatus('idle');
+                      }}
+                      className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium" 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-500 dark:text-slate-400 ml-1">Email</label>
-                    <input type="email" placeholder="john@example.com" className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium" />
+                    <input 
+                      type="email" 
+                      placeholder="john@example.com" 
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (status !== 'idle') setStatus('idle');
+                      }}
+                      className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium" 
+                    />
                   </div>
                 </div>
                 <div className="space-y-2 flex flex-col flex-grow">
                   <label className="text-sm font-bold text-slate-500 dark:text-slate-400 ml-1">Pesan</label>
-                  <textarea placeholder="Ceritakan ide Anda..." className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium flex-grow resize-none min-h-[150px]"></textarea>
+                  <textarea 
+                    placeholder="Ceritakan ide Anda..." 
+                    value={formData.message}
+                    onChange={(e) => {
+                      setFormData({ ...formData, message: e.target.value });
+                      if (status !== 'idle') setStatus('idle');
+                    }}
+                    className="w-full px-6 py-4 glass bg-white dark:bg-slate-900/50 border-slate-200 dark:border-white/5 rounded-xl text-slate-900 dark:text-white outline-none focus:border-primary/50 transition-all font-medium flex-grow resize-none min-h-[150px]"
+                  ></textarea>
                 </div>
+
+                {status === 'success' && (
+                  <div className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-sm font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                    <CheckCircle2 size={18} />
+                    <span>Pesan berhasil terkirim!</span>
+                  </div>
+                )}
+
+                {status === 'error' && (
+                  <div className="bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-sm font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                    <XCircle size={18} />
+                    <span>Gagal dikirim! Harap isi semua kolom.</span>
+                  </div>
+                )}
+
+                {status === 'invalid_email' && (
+                  <div className="bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-sm font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+                    <XCircle size={18} />
+                    <span>Format email tidak valid!</span>
+                  </div>
+                )}
+
                 <button type="submit" className="w-full bg-primary text-slate-900 py-5 rounded-xl font-black text-lg shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-100 transition-all mt-auto">
                   Kirim Pesan
                 </button>
