@@ -244,8 +244,8 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
 
 const FindUsSection = () => {
   return (
-    <section className="py-24 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 relative">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-24 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-16">
           <div className="inline-block px-3 py-1 glass rounded-full mb-6">
             <span className="text-base uppercase tracking-[1px] text-primary font-bold">Find Us</span>
@@ -255,26 +255,26 @@ const FindUsSection = () => {
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-center lg:items-start">
           {/* Info Side */}
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="space-y-8"
+            className="space-y-8 w-full max-w-2xl lg:max-w-none"
           >
-            <div className="glass p-8 rounded-[2rem] border border-slate-200 dark:border-white/5 space-y-6">
+            <div className="glass p-5 md:p-8 rounded-[2rem] border border-slate-200 dark:border-white/5 space-y-6 w-full">
               <div className="flex gap-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
                   <MapPin className="text-primary" size={24} />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Alamat</h4>
                   <a 
                     href="https://maps.google.com/?q=-7.0145892,107.5794717"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed hover:text-primary transition-colors block break-words"
                   >
                     Jl. Raya Banjaran Km 14 Gg. Kesehatan No 124 Kp. Sepen Rt 05 Rw 06 Desa Sukasari Kec. Pameungpeuk Kab. Bandung
                   </a>
@@ -285,13 +285,13 @@ const FindUsSection = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
                   <Instagram className="text-primary" size={24} />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Instagram</h4>
                   <a 
                     href="https://instagram.com/sentrakreasi.ukm" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed hover:text-primary transition-colors block break-all"
                   >
                     @sentrakreasi.ukm
                   </a>
@@ -302,13 +302,13 @@ const FindUsSection = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
                   <Phone className="text-primary" size={24} />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">No Telepon</h4>
                   <a 
                     href="https://wa.me/6289611284382"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed hover:text-primary transition-colors block break-all"
                   >
                     089611284382
                   </a>
@@ -319,11 +319,11 @@ const FindUsSection = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 border border-primary/20">
                   <Mail className="text-primary" size={24} />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Email</h4>
                   <a 
                     href="mailto:sentrakreasibandung@gmail.com"
-                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed hover:text-primary transition-colors block break-all"
                   >
                     sentrakreasibandung@gmail.com
                   </a>
@@ -331,8 +331,8 @@ const FindUsSection = () => {
               </div>
             </div>
 
-            <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl">
-              <p className="text-primary text-lg font-medium leading-relaxed italic">
+            <div className="p-6 bg-primary/5 border border-primary/20 rounded-2xl w-full">
+              <p className="text-primary text-sm sm:text-base md:text-lg font-medium leading-relaxed italic break-words">
                 "Lokasi Kami: Jl. Raya Banjaran KM 14, Gg. Kesehatan No 124, RT 05/ RW 06, Desa Sukasari, Kec. Pameungpeuk Bandung"
               </p>
             </div>
@@ -340,15 +340,15 @@ const FindUsSection = () => {
 
           {/* Map Side */}
           <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="h-full min-h-[400px] lg:min-h-full"
+            className="w-full h-full min-h-[300px] lg:min-h-full"
           >
             <div className="w-full h-full rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl relative grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
               <iframe 
                 src="https://maps.google.com/maps?q=-7.0145892,107.5794717&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                className="w-full h-full min-h-[450px] border-0"
+                className="w-full h-full min-h-[300px] md:min-h-[450px] border-0"
                 allowFullScreen={true}
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
