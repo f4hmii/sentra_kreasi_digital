@@ -38,7 +38,7 @@ const Activities = () => {
     sub_headline: "Telusuri berbagai inisiatif dan momen berharga yang telah kami lalui bersama untuk memajukan potensi kreatif di Kabupaten Bandung."
   };
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
   const totalPages = Math.ceil(activitiesPosts.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentActivities = activitiesPosts.slice(startIndex, startIndex + itemsPerPage);
