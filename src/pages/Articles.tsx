@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, Tag, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchPosts, CmsPost } from '../services/cmsApi';
+import { fetchPosts, CmsPost, fixDriveUrl, parseContent } from '../services/cmsApi';
 
 const Articles = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +59,7 @@ const Articles = () => {
           <div className="inline-block px-3 py-1 glass rounded-full mb-6">
             <span className="text-base uppercase tracking-[1px] text-primary font-bold">Artikel & Wawasan</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
+          <h2 className="text-3xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
             Wawasan & Ide <span className="text-gradient">Kreatif</span>
           </h2>
           <p className="mt-6 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light">
@@ -78,8 +78,9 @@ const Articles = () => {
               className="space-y-0"
             >
               {currentArticles.map((article, i) => {
-                const articleContent = article.content?.[0] || {};
-                const imageUrl = articleContent.featured_image || 'https://via.placeholder.com/800x600?text=No+Image';
+                const rawContent = parseContent(article.content);
+                const articleContent = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+                const imageUrl = fixDriveUrl(articleContent.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image';
                 const dateStr = article.created_at ? new Date(article.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
                 const categories = articleContent.tags ? articleContent.tags.split(',').map((t: string) => t.trim()) : [];
                 const articleExcerpt = (article.excerpt || articleContent.excerpt || '').replace(/&nbsp;/g, ' ');
@@ -99,6 +100,8 @@ const Articles = () => {
                       <img 
                         src={imageUrl} 
                         alt={article.title} 
+                        crossOrigin="anonymous"
+                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors"></div>
@@ -109,7 +112,7 @@ const Articles = () => {
                   <div className="flex-grow space-y-3">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="text-base font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase tracking-widest">{dateStr}</span>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {categories.map((cat: string, idx: number) => (
                           <span key={idx} className="text-base font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1">
                             <Tag size={10} /> {cat}

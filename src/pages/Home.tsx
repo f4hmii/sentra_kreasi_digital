@@ -12,7 +12,7 @@ import {
   Mail
 } from 'lucide-react';
 
-import { fetchPages, fetchPosts, CmsPage, CmsPost } from '../services/cmsApi';
+import { fetchPages, fetchPosts, CmsPage, CmsPost, fixDriveUrl, parseContent } from '../services/cmsApi';
 
 const Hero = ({ data }: { data?: any }) => {
   const headline = data?.headline || "Komunitas Kampung Digital Sentra Kreasi";
@@ -30,6 +30,8 @@ const Hero = ({ data }: { data?: any }) => {
         <img 
           src={bgImage} 
           alt="Community Innovation" 
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
           className="w-full h-full object-cover opacity-80 dark:opacity-100 transition-opacity duration-700"
         />
         <div className="absolute inset-0 bg-slate-50/30 dark:bg-slate-900/70"></div>
@@ -46,18 +48,18 @@ const Hero = ({ data }: { data?: any }) => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          <h1 className="text-6xl md:text-7xl font-display font-black leading-tight mb-6 text-slate-900 dark:text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black leading-tight mb-6 text-slate-900 dark:text-white">
             {firstPart} {lastTwoWords && <span className="text-gradient">{lastTwoWords}</span>}
             {!lastTwoWords && <span className="text-gradient">{firstPart}</span>}
           </h1>
           <p className="text-lg text-black dark:text-slate-400 mb-10 leading-relaxed font-semibold mx-auto">
             {subHeadline}
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link to="/repository" className="px-8 py-4 bg-primary text-slate-900 rounded-lg font-bold hover:scale-105 transition-all flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto px-4 sm:px-0">
+            <Link to="/repository" className="w-full sm:w-auto px-8 py-4 bg-primary text-slate-900 rounded-lg font-bold hover:scale-105 transition-all flex items-center justify-center gap-2">
               Lihat Repository <ArrowRight size={20} />
             </Link>
-            <Link to="/tentang-kami" className="px-8 py-4 glass rounded-lg font-bold text-slate-900 dark:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+            <Link to="/tentang-kami" className="w-full sm:w-auto px-8 py-4 glass rounded-lg font-bold text-slate-900 dark:text-white hover:bg-white/5 transition-all flex items-center justify-center gap-2">
               Kenali Kami
             </Link>
           </div>
@@ -78,11 +80,11 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
           </div>
           {data?.content ? (
             <h2 
-              className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight [&_strong]:text-primary"
+              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-slate-900 dark:text-white leading-snug [&_strong]:text-primary break-words"
               dangerouslySetInnerHTML={{ __html: data.content.replace(/<\/?h2>/g, '') }}
             />
           ) : (
-            <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display font-black text-slate-900 dark:text-white leading-snug break-words">
               Produk UKM <span className="text-gradient">Sentral Kreasi</span>
             </h2>
           )}
@@ -90,8 +92,9 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
 
         <div className="space-y-32">
           {products.map((product, i) => {
-            const content = product.content?.[0] || {};
-            const imageUrl = content.featured_image || content.product_gallery?.[0]?.url || 'https://via.placeholder.com/800x600?text=No+Image';
+            const rawContent = parseContent(product.content);
+            const content = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+            const imageUrl = fixDriveUrl(content.featured_image || content.product_gallery?.[0]?.url) || 'https://via.placeholder.com/800x600?text=No+Image';
             
             const excerptParts = (product.excerpt || content.excerpt || '').split('\n').map((s: string) => s.trim()).filter(Boolean);
             const tagline = excerptParts.length > 0 ? excerptParts[0] : 'Produk Unggulan';
@@ -111,10 +114,12 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
               {/* Image Side */}
               <div className="w-full lg:w-1/2 relative group">
                 <div className="absolute -inset-4 bg-primary/10 rounded-[2rem] blur-2xl group-hover:bg-primary/20 transition-all duration-700"></div>
-                <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl">
+                <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl bg-slate-100 dark:bg-slate-800">
                   <img 
                     src={imageUrl} 
                     alt={product.title} 
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-slate-900/40 dark:bg-slate-900/60"></div>
@@ -125,7 +130,7 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
               <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
                 <div>
                   <p className="text-primary text-lg font-black uppercase tracking-widest mb-3">{tagline}</p>
-                  <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-6">
+                  <h3 className="text-2xl md:text-4xl font-display font-bold text-slate-900 dark:text-white mb-6">
                     {product.title}
                   </h3>
                   <div className="w-20 h-1 bg-primary/30 mx-auto lg:mx-0 rounded-full"></div>
@@ -171,7 +176,7 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
             <div className="inline-block px-3 py-1 glass rounded-full mb-6">
               <span className="text-base uppercase tracking-[1px] text-primary font-bold">UKM SENTRA KREASI</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-display font-black text-slate-900 dark:text-white leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-black text-slate-900 dark:text-white leading-snug break-words">
               Event - event yang <br/> <span className="text-primary">Telah Diselenggarakan</span>
             </h2>
           </div>
@@ -184,8 +189,9 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
 
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-20">
           {events.slice(0, 4).map((event, i) => {
-            const eventContent = event.content?.[0] || {};
-            const imageUrl = eventContent.event_gallery?.[0]?.url || eventContent.featured_image || 'https://via.placeholder.com/800x600?text=No+Image';
+            const rawContent = parseContent(event.content);
+            const eventContent = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+            const imageUrl = fixDriveUrl(eventContent.event_gallery?.[0]?.url || eventContent.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image';
             const eventExcerpt = (event.excerpt || eventContent.excerpt || "Deskripsi kegiatan tidak tersedia.").replace(/&nbsp;/g, ' ');
 
             return (
@@ -198,10 +204,12 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
               className="group"
             >
               <div className="space-y-6">
-                <Link to={`/kegiatan/${event.slug}`} className="block aspect-[16/9] rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl relative">
+                <Link to={`/kegiatan/${event.slug}`} className="block aspect-[16/9] rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl relative bg-slate-100 dark:bg-slate-800">
                   <img 
                     src={imageUrl} 
                     alt={event.title} 
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
                   />
                   <div className="absolute top-6 left-6 glass px-4 py-2 rounded-full">
@@ -240,7 +248,7 @@ const FindUsSection = () => {
           <div className="inline-block px-3 py-1 glass rounded-full mb-6">
             <span className="text-base uppercase tracking-[1px] text-primary font-bold">Find Us</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-display font-black text-slate-900 dark:text-white leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-display font-black text-slate-900 dark:text-white leading-snug break-words">
             Kunjungi <span className="text-gradient">Kami</span>
           </h2>
         </div>
@@ -259,7 +267,7 @@ const FindUsSection = () => {
                   <MapPin className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-bold mb-2">Alamat</h4>
+                  <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Alamat</h4>
                   <a 
                     href="https://maps.google.com/?q=-7.0145892,107.5794717"
                     target="_blank"
@@ -276,12 +284,12 @@ const FindUsSection = () => {
                   <Instagram className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-bold mb-2">Instagram</h4>
+                  <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Instagram</h4>
                   <a 
                     href="https://instagram.com/sentrakreasi.ukm" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
                   >
                     @sentrakreasi.ukm
                   </a>
@@ -293,12 +301,12 @@ const FindUsSection = () => {
                   <Phone className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-bold mb-2">No Telepon</h4>
+                  <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">No Telepon</h4>
                   <a 
                     href="https://wa.me/6289611284382"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
                   >
                     089611284382
                   </a>
@@ -310,10 +318,10 @@ const FindUsSection = () => {
                   <Mail className="text-primary" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-bold mb-2">Email</h4>
+                  <h4 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">Email</h4>
                   <a 
                     href="mailto:sentrakreasibandung@gmail.com"
-                    className="text-slate-600 dark:text-slate-400 text-lg hover:text-primary transition-colors block"
+                    className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed hover:text-primary transition-colors block"
                   >
                     sentrakreasibandung@gmail.com
                   </a>
@@ -337,7 +345,7 @@ const FindUsSection = () => {
           >
             <div className="w-full h-full rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl relative grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15839.818804593452!2d107.5794717!3d-7.0145892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDAnNTIuNSJTIDEwN8KwMzQnNDYuMSJF!5e0!3m2!1sen!2sid!4v1713877400000!5m2!1sen!2sid" 
+                src="https://maps.google.com/maps?q=-7.0145892,107.5794717&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                 className="w-full h-full min-h-[450px] border-0"
                 allowFullScreen={true}
                 loading="lazy" 

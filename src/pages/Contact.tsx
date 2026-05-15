@@ -65,13 +65,13 @@ const Contact = () => {
   return (
     <section className="py-32 bg-slate-50 dark:bg-slate-900 min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="glass rounded-[48px] overflow-hidden p-8 md:p-20 relative">
+        <div className="glass rounded-[2rem] md:rounded-[48px] overflow-hidden p-6 md:p-20 relative">
           <div className="grid lg:grid-cols-2 gap-16 relative z-10 items-stretch">
             <div>
               <div className="inline-block px-3 py-1 glass rounded-full mb-6">
                 <span className="text-base uppercase tracking-[1px] text-primary font-bold">{heroData.sub_headline}</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight mb-8">
+              <h2 className="text-3xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight mb-8">
                 {heroData.headline}
               </h2>
               <div className="space-y-6">

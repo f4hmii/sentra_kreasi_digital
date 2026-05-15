@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowRight, Search, Layers, Zap, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Search, Layers, Zap, ShieldCheck, ChevronLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchPosts } from '../services/cmsApi';
@@ -8,12 +8,14 @@ export interface CanvaTemplate {
   id: string;
   title: string;
   category: string;
+  categories: string[];
   image: string;
   description: string;
   canvaUrl: string;
 }
 
 const Repository = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [templates, setTemplates] = useState<CanvaTemplate[]>([]);
@@ -25,14 +27,43 @@ const Repository = () => {
         const posts = await fetchPosts();
         const templatePosts = posts.filter(post => post.category === 'Template' && post.status === 'published');
         
+        const fixDriveUrl = (url: string) => {
+          if (!url) return '';
+          if (url.includes('drive.google.com')) {
+            const idMatch = url.match(/[?&]id=([^&]+)/) || url.match(/\/d\/([^/]+)/);
+            if (idMatch && idMatch[1]) {
+              // Format lh3.googleusercontent.com is the most reliable for embedding Drive images
+              return `https://lh3.googleusercontent.com/d/${idMatch[1]}=w1200`;
+            }
+          }
+          return url;
+        };
+
         const parsedTemplates: CanvaTemplate[] = templatePosts.map(post => {
-          const content = post.content?.[0] || {};
+          let rawContent = post.content;
+          if (typeof rawContent === 'string') {
+            try {
+              rawContent = JSON.parse(rawContent);
+            } catch (e) {
+              rawContent = [];
+            }
+          }
+          
+          const content = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+          const rawTags = content.tags || ['Lainnya'];
+          const normalizedTags = rawTags.map((t: string) => {
+            let name = t.toLowerCase().split(' ').map((s: string) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+            if (name === "Media Sosial") return "Sosial Media";
+            return name;
+          });
+          
           return {
             id: post.id.toString(),
-            title: post.excerpt || content.excerpt || 'Template Tanpa Judul',
-            category: post.title || 'Lainnya',
-            image: content.featured_image || 'https://via.placeholder.com/800x600?text=No+Image',
-            description: content.short_description || '',
+            title: post.title,
+            category: normalizedTags[0],
+            categories: normalizedTags,
+            image: fixDriveUrl(content.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image',
+            description: content.short_description || post.excerpt || '',
             canvaUrl: content.cta?.[0]?.url || '#',
           };
         });
@@ -55,11 +86,36 @@ const Repository = () => {
   ];
 
   const filteredTemplates = templates.filter(t => {
-    const matchesFilter = filter === 'all' || t.category === filter;
+    const matchesFilter = filter === 'all' || t.categories.includes(filter);
     const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           t.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  // Pagination Logic
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(filteredTemplates.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTemplates = filteredTemplates.slice(startIndex, startIndex + itemsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+  };
+
+  // Reset to page 1 when filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchQuery]);
 
   return (
     <section className="pt-20 pb-32 bg-slate-50 dark:bg-slate-900 min-h-screen">
@@ -69,7 +125,7 @@ const Repository = () => {
           <div className="inline-block px-3 py-1 glass rounded-full mb-6">
             <span className="text-base uppercase tracking-[1px] text-primary font-bold">Repository Tools</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight mb-10">
+          <h2 className="text-3xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight mb-10">
             Katalog <span className="text-gradient">Galeri Digital</span>
           </h2>
           <div className="space-y-6 text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-light text-center">
@@ -162,7 +218,7 @@ const Repository = () => {
           <>
             {/* Templates Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTemplates.map((template, i) => (
+          {currentTemplates.map((template, i) => (
             <motion.div
               key={template.id}
               layout
@@ -171,30 +227,36 @@ const Repository = () => {
               transition={{ duration: 0.4 }}
               className="group"
             >
-              <Link to={`/repository/${template.id}`} className="block relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl mb-6">
+              <Link to={`/repository/${template.id}`} className="block relative aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl mb-6 bg-slate-100 dark:bg-slate-800">
                 <img 
                   src={template.image} 
                   alt={template.title}
+                  crossOrigin="anonymous"
+                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 dark:opacity-100"
                 />
                 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm">
+                <div className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm">
+                  <p className="text-white/90 text-sm font-light mb-4 line-clamp-3">
+                    {template.description}
+                  </p>
                   <div className="flex items-center gap-2 text-base font-black uppercase tracking-widest text-white group-hover:text-primary transition-colors">
                     Lihat Detail <ArrowRight size={14} />
                   </div>
                 </div>
 
-                {/* Corner Type Label */}
-                <div className="absolute top-6 left-6 px-3 py-1 glass rounded-full">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white">{template.category}</span>
+                {/* Corner Type Labels */}
+                <div className="absolute top-6 left-6 flex flex-wrap gap-2">
+                  {template.categories.map((cat, idx) => (
+                    <div key={idx} className="px-3 py-1 glass rounded-full">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white">{cat}</span>
+                    </div>
+                  ))}
                 </div>
               </Link>
 
               <div className="px-2 text-center">
-                <p className="text-primary text-lg uppercase tracking-widest font-black mb-2">
-                  {template.category}
-                </p>
                 <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
                   <Link to={`/repository/${template.id}`} className="hover:text-primary transition-colors">
                     {template.title}
@@ -204,6 +266,41 @@ const Repository = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-20 flex items-center justify-center gap-8">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base uppercase tracking-widest transition-all ${
+                currentPage === 1 
+                ? 'opacity-20 cursor-not-allowed text-slate-400 dark:text-slate-500 underline-none shadow-none bg-transparent' 
+                : 'glass text-slate-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 text-sky-400'
+              }`}
+            >
+              <ChevronLeft size={18} /> Previous
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-primary font-display font-black text-xl">{currentPage}</span>
+              <span className="text-slate-300 dark:text-slate-600">/</span>
+              <span className="text-slate-500 dark:text-slate-400 font-bold">{totalPages}</span>
+            </div>
+
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-base uppercase tracking-widest transition-all ${
+                currentPage === totalPages 
+                ? 'opacity-20 cursor-not-allowed text-slate-400 dark:text-slate-500 underline-none shadow-none bg-transparent' 
+                : 'glass text-slate-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 text-sky-400'
+              }`}
+            >
+              Next <ArrowRight size={18} />
+            </button>
+          </div>
+        )}
 
         {/* Empty State */}
         {filteredTemplates.length === 0 && (

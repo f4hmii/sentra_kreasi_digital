@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Calendar, Tag, User } from 'lucide-react';
 import Markdown from 'react-markdown';
-import { fetchPosts, CmsPost } from '../services/cmsApi';
+import { fetchPosts, CmsPost, fixDriveUrl, parseContent } from '../services/cmsApi';
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>(); // This is actually the slug
@@ -49,8 +49,9 @@ const ArticleDetail = () => {
     );
   }
 
-  const articleContent = article.content?.[0] || {};
-  const imageUrl = articleContent.featured_image || 'https://via.placeholder.com/800x600?text=No+Image';
+  const rawContent = parseContent(article.content);
+  const articleContent = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+  const imageUrl = fixDriveUrl(articleContent.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image';
   const dateStr = article.created_at ? new Date(article.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
   const categories = articleContent.tags ? articleContent.tags.split(',').map((t: string) => t.trim()) : [];
   const articleExcerpt = (article.excerpt || articleContent.excerpt || '').replace(/&nbsp;/g, ' ');
@@ -80,7 +81,7 @@ const ArticleDetail = () => {
             <span className="flex items-center gap-2 text-primary text-base font-black uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
               <Calendar size={14} /> {dateStr}
             </span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {categories.map((cat: string, i: number) => (
                 <span key={i} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-base font-bold uppercase tracking-widest glass px-3 py-1 rounded-full">
                   <Tag size={12} /> {cat}
@@ -93,7 +94,7 @@ const ArticleDetail = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-display font-black leading-tight text-slate-900 dark:text-white"
+            className="text-3xl md:text-6xl font-display font-black leading-tight text-slate-900 dark:text-white"
           >
             {article.title}
           </motion.h1>
@@ -118,6 +119,8 @@ const ArticleDetail = () => {
           <img 
             src={imageUrl} 
             alt={article.title} 
+            crossOrigin="anonymous"
+            referrerPolicy="no-referrer"
             className="w-full h-full object-cover"
           />
         </motion.div>

@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ExternalLink, ArrowRight, Tag } from 'lucide-react';
-import { fetchPages } from '../services/cmsApi';
+import { fetchPosts } from '../services/cmsApi';
 import { CanvaTemplate } from './Repository';
 
 const TemplateDetail = () => {
@@ -15,38 +15,60 @@ const TemplateDetail = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const pages = await fetchPages();
-        const repoPage = pages.find(p => p.slug === 'repository' && p.status === 'published');
+        const posts = await fetchPosts();
+        const templatePosts = posts.filter(post => post.category === 'Template' && post.status === 'published');
         
-        if (repoPage && repoPage.content) {
-          const content = repoPage.content;
-          const galleries = content.filter(c => c.type === 'gallery');
-          const ctas = content.filter(c => c.type === 'cta-banner');
+        const fixDriveUrl = (url: string) => {
+          if (!url) return '';
+          if (url.includes('drive.google.com')) {
+            const idMatch = url.match(/[?&]id=([^&]+)/) || url.match(/\/d\/([^/]+)/);
+            if (idMatch && idMatch[1]) {
+              // Format lh3.googleusercontent.com is the most reliable for embedding Drive images
+              return `https://lh3.googleusercontent.com/d/${idMatch[1]}=w1200`;
+            }
+          }
+          return url;
+        };
 
-          const parsedTemplates: CanvaTemplate[] = galleries.map((gallery, index) => {
-            const cta = ctas.find(c => c.data?.headline === gallery.data?.title) || ctas[index];
-            return {
-              id: gallery.id,
-              title: gallery.data?.title || 'Template Tanpa Judul',
-              category: gallery.data?.subtitle || 'Lainnya',
-              image: gallery.data?.images?.[0]?.url || 'https://via.placeholder.com/800x600?text=No+Image',
-              description: cta?.data?.sub_headline || '',
-              canvaUrl: cta?.data?.button_link || '#',
-            };
+        const parsedTemplates: any[] = templatePosts.map(post => {
+          let rawContent = post.content;
+          if (typeof rawContent === 'string') {
+            try {
+              rawContent = JSON.parse(rawContent);
+            } catch (e) {
+              rawContent = [];
+            }
+          }
+          
+          const content = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+          const rawTags = content.tags || ['Lainnya'];
+          const normalizedTags = rawTags.map((t: string) => {
+            let name = t.toLowerCase().split(' ').map((s: string) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+            if (name === "Media Sosial") return "Sosial Media";
+            return name;
           });
 
-          const currentTemplate = parsedTemplates.find(t => t.id === id);
-          if (currentTemplate) {
-            setTemplate(currentTemplate);
-            const others = parsedTemplates.filter(t => t.id !== id);
-            const shuffled = [...others].sort(() => 0.5 - Math.random());
-            setRecommendations(shuffled.slice(0, 3));
-            window.scrollTo(0, 0);
-          } else {
-            navigate('/repository');
-          }
+          return {
+            id: post.id.toString(),
+            title: post.title,
+            category: normalizedTags[0],
+            categories: normalizedTags,
+            image: fixDriveUrl(content.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image',
+            description: content.short_description || post.excerpt || '',
+            canvaUrl: content.cta?.[0]?.url || '#',
+          };
+        });
+
+        const currentTemplate = parsedTemplates.find(t => t.id === id);
+        if (currentTemplate) {
+          setTemplate(currentTemplate as CanvaTemplate);
+          const others = parsedTemplates.filter(t => t.id !== id);
+          const shuffled = [...others].sort(() => 0.5 - Math.random());
+          setRecommendations(shuffled.slice(0, 3) as CanvaTemplate[]);
+          window.scrollTo(0, 0);
         } else {
-            navigate('/repository');
+          console.warn(`Template dengan ID ${id} tidak ditemukan`);
+          navigate('/repository');
         }
       } catch (error) {
         console.error("Gagal mengambil detail template:", error);
@@ -65,8 +87,6 @@ const TemplateDetail = () => {
       </div>
     );
   }
-
-  if (!template) return null;
 
   if (!template) return null;
 
@@ -95,6 +115,8 @@ const TemplateDetail = () => {
               <img 
                 src={template.image} 
                 alt={template.title} 
+                crossOrigin="anonymous"
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -107,11 +129,15 @@ const TemplateDetail = () => {
             className="space-y-8"
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 glass rounded-full">
-                <Tag size={12} className="text-primary" />
-                <span className="text-base uppercase tracking-[1px] text-primary font-bold">{template.category}</span>
+              <div className="flex flex-wrap gap-2">
+                {template.categories.map((cat, idx) => (
+                  <div key={idx} className="inline-flex items-center gap-2 px-3 py-1 glass rounded-full">
+                    <Tag size={12} className="text-primary" />
+                    <span className="text-base uppercase tracking-[1px] text-primary font-bold">{cat}</span>
+                  </div>
+                ))}
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-black leading-tight text-slate-900 dark:text-white">
+              <h1 className="text-3xl md:text-5xl font-display font-black leading-tight text-slate-900 dark:text-white">
                 {template.title}
               </h1>
             </div>

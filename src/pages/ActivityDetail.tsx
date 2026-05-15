@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Calendar, Tag, ChevronRight, ArrowRight } from 'lucide-react';
 import Markdown from 'react-markdown';
-import { fetchPosts, CmsPost } from '../services/cmsApi';
+import { fetchPosts, CmsPost, fixDriveUrl, parseContent } from '../services/cmsApi';
 
 const ActivityDetail = () => {
   const { id } = useParams<{ id: string }>(); // This 'id' is actually the slug
@@ -54,8 +54,9 @@ const ActivityDetail = () => {
     );
   }
 
-  const eventContent = activity.content?.[0] || {};
-  const imageUrl = eventContent.event_gallery?.[0]?.url || eventContent.featured_image || 'https://via.placeholder.com/800x600?text=No+Image';
+  const rawContent = parseContent(activity.content);
+  const eventContent = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+  const imageUrl = fixDriveUrl(eventContent.event_gallery?.[0]?.url || eventContent.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image';
   const dateStr = eventContent.event_date 
     ? new Date(eventContent.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) 
     : 'Tanggal tidak tersedia';
@@ -101,7 +102,7 @@ const ActivityDetail = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-4xl md:text-6xl font-display font-black leading-tight text-slate-900 dark:text-white"
+                className="text-3xl md:text-6xl font-display font-black leading-tight text-slate-900 dark:text-white"
               >
                 {activity.title}
               </motion.h1>
@@ -130,6 +131,8 @@ const ActivityDetail = () => {
                 <img 
                   src={imageUrl} 
                   alt={activity.title} 
+                  crossOrigin="anonymous"
+                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-slate-900/40"></div>
@@ -188,7 +191,7 @@ const ActivityDetail = () => {
                     className="group flex gap-4 p-4 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all border border-transparent hover:border-slate-200 dark:hover:border-white/5"
                   >
                     <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 shadow-md">
-                      <img src={otherImage} alt={other.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <img src={fixDriveUrl(otherImage)} alt={other.title} crossOrigin="anonymous" referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div className="flex flex-col justify-center">
                       <p className="text-lg text-primary font-black uppercase tracking-widest mb-1">{otherDate}</p>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Tag, Calendar, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { fetchPages, fetchPosts, CmsPage, CmsPost } from '../services/cmsApi';
+import { fetchPages, fetchPosts, CmsPage, CmsPost, fixDriveUrl, parseContent } from '../services/cmsApi';
 
 const Activities = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,7 +87,7 @@ const Activities = () => {
           <div className="inline-block px-3 py-1 glass rounded-full mb-6">
             <span className="text-base uppercase tracking-[1px] text-primary font-bold">Agenda & Dokumentasi</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
+          <h2 className="text-3xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
             {renderHeadline(heroData.headline)}
           </h2>
           <p className="mt-6 text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light">
@@ -106,8 +106,9 @@ const Activities = () => {
               className="space-y-24"
             >
               {currentActivities.map((act, i) => {
-            const eventContent = act.content?.[0] || {};
-            const imageUrl = eventContent.event_gallery?.[0]?.url || eventContent.featured_image || 'https://via.placeholder.com/800x600?text=No+Image';
+            const rawContent = parseContent(act.content);
+            const eventContent = (Array.isArray(rawContent) ? rawContent[0] : rawContent) || {};
+            const imageUrl = fixDriveUrl(eventContent.event_gallery?.[0]?.url || eventContent.featured_image) || 'https://via.placeholder.com/800x600?text=No+Image';
             const dateStr = eventContent.event_date 
               ? new Date(eventContent.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) 
               : 'Tanggal tidak tersedia';
@@ -125,16 +126,18 @@ const Activities = () => {
               {/* Image Content */}
               <Link to={`/kegiatan/${act.slug}`} className="w-full lg:w-3/5 relative group block">
                 <div className="absolute -inset-4 bg-primary/10 rounded-[2.5rem] blur-2xl group-hover:bg-primary/20 transition-all duration-700"></div>
-                <div className="relative aspect-[16/9] rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl">
+                <div className="relative aspect-[16/9] rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-white/5 shadow-2xl bg-slate-100 dark:bg-slate-800">
                   <img 
                     src={imageUrl} 
                     alt={act.title} 
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 dark:opacity-100"
                   />
                   <div className="absolute inset-0 bg-slate-900/40 opacity-60"></div>
                   
                   {/* Category Tags on Image */}
-                  <div className="absolute top-8 left-8 flex flex-wrap gap-2">
+                  <div className="absolute top-8 left-8 flex flex-wrap gap-2 max-w-[calc(100%-4rem)]">
                     {categories.map((cat: string, idx: number) => (
                       <div key={idx} className="glass px-3 py-1.5 rounded-full flex items-center gap-2">
                         <Tag size={12} className="text-primary" />
@@ -160,7 +163,7 @@ const Activities = () => {
                     <span className="text-base font-bold uppercase tracking-widest">{dateStr}</span>
                   </div>
                   <Link to={`/kegiatan/${act.slug}`} className="block">
-                    <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white leading-tight hover:text-primary transition-colors">
+                    <h3 className="text-2xl md:text-4xl font-display font-bold text-slate-900 dark:text-white leading-tight hover:text-primary transition-colors">
                       {act.title}
                     </h3>
                   </Link>

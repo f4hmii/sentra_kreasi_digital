@@ -104,3 +104,31 @@ export const fetchSettings = async () => {
     throw error;
   }
 };
+
+/**
+ * Normalizes Google Drive URLs to a stable embeddable format
+ */
+export const fixDriveUrl = (url: string) => {
+  if (!url) return '';
+  if (url.includes('drive.google.com')) {
+    const idMatch = url.match(/[?&]id=([^&]+)/) || url.match(/\/d\/([^/]+)/);
+    if (idMatch && idMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${idMatch[1]}=w1200`;
+    }
+  }
+  return url;
+};
+
+/**
+ * Safely parses CMS content which might be a JSON string or an object
+ */
+export const parseContent = (content: any) => {
+  if (typeof content === 'string') {
+    try {
+      return JSON.parse(content);
+    } catch (e) {
+      return [];
+    }
+  }
+  return content;
+};

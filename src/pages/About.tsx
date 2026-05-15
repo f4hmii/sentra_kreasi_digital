@@ -78,7 +78,7 @@ const About = () => {
               <div className="inline-block px-3 py-1 glass rounded-full">
                 <span className="text-base uppercase tracking-[1px] text-primary font-bold">Tentang Kami</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
+              <h1 className="text-3xl md:text-6xl font-display font-black text-slate-900 dark:text-white leading-tight">
                 {firstPart} {lastWord && <span className="text-gradient">{lastWord}</span>}
                 {!lastWord && <span className="text-gradient">{firstPart}</span>}
               </h1>
@@ -250,7 +250,7 @@ const About = () => {
               </div>
             </motion.div>
 
-            <h3 className="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-4">Full Team</h3>
+            <h3 className="text-3xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-4">Full Team</h3>
             <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
               Kampung Digital Sentra Kreasi dipimpin oleh tim pengurus inti yang berdedikasi untuk memberdayakan.
             </p>
