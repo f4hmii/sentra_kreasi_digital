@@ -65,7 +65,7 @@ const Footer = () => {
               <li><Link to="/tentang-kami" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">Tentang Kami</Link></li>
               <li><Link to="/artikel" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">Artikel & Berita</Link></li>
               <li><Link to="/kegiatan" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">Agenda Kegiatan</Link></li>
-              <li><Link to="/repository" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">Repository Kode</Link></li>
+              <li><Link to="/repository" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">Repository</Link></li>
             </ul>
           </div>
           

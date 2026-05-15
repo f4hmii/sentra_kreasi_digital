@@ -137,11 +137,11 @@ const Activities = () => {
                   <div className="absolute inset-0 bg-slate-900/40 opacity-60"></div>
                   
                   {/* Category Tags on Image */}
-                  <div className="absolute top-8 left-8 flex flex-wrap gap-2 max-w-[calc(100%-4rem)]">
+                  <div className="absolute top-6 left-6 flex flex-wrap gap-1.5 max-w-[calc(100%-3rem)]">
                     {categories.map((cat: string, idx: number) => (
-                      <div key={idx} className="glass px-3 py-1.5 rounded-full flex items-center gap-2">
-                        <Tag size={12} className="text-primary" />
-                        <span className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider">{cat}</span>
+                      <div key={idx} className="glass px-2 py-1 rounded-full flex items-center gap-1.5 border border-white/10">
+                        <Tag size={10} className="text-primary" />
+                        <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{cat}</span>
                       </div>
                     ))}
                   </div>

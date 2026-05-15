@@ -212,8 +212,10 @@ const EventsSection = ({ events }: { events: CmsPost[] }) => {
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
                   />
-                  <div className="absolute top-6 left-6 glass px-4 py-2 rounded-full">
-                    <span className="text-primary font-display font-black text-lg">0{i + 1}</span>
+                  <div className="absolute top-4 left-4 flex flex-wrap gap-1.5 max-w-[calc(100%-2rem)]">
+                    <div className="glass px-2 py-0.5 rounded-full">
+                      <span className="text-primary font-display font-black text-xs">0{i + 1}</span>
+                    </div>
                   </div>
                   <div className="absolute inset-0 bg-slate-900/40 opacity-60"></div>
                 </Link>

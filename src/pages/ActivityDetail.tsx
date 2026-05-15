@@ -91,7 +91,7 @@ const ActivityDetail = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((cat: string, i: number) => (
-                    <span key={i} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-base font-bold uppercase tracking-widest glass px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                    <span key={i} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest glass px-3 py-1 rounded-full border border-slate-200 dark:border-white/10 shadow-sm">
                       <Tag size={10} className="text-primary" /> {cat}
                     </span>
                   ))}
