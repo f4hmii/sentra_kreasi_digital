@@ -152,9 +152,14 @@ const ProductHighlights = ({ data, products }: { data?: any, products: CmsPost[]
                 )}
 
                 <div className="pt-4">
-                  <Link to="/hubungi-kami" className="px-8 py-4 bg-primary text-slate-900 rounded-xl font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20 inline-flex items-center gap-2">
+                  <a 
+                    href={`https://wa.me/6289611284382?text=${encodeURIComponent(`Halo Sentra Kreasi, saya tertarik untuk memesan ${product.title}. Bisa berikan informasi lebih lanjut?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-8 py-4 bg-primary text-slate-900 rounded-xl font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20 inline-flex items-center gap-2"
+                  >
                     Pesan Sekarang <ArrowRight size={20} />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </motion.div>
