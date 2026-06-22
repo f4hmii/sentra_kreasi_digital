@@ -14,7 +14,7 @@ const Articles = () => {
       try {
         setLoading(true);
         const posts = await fetchPosts();
-        const articlesList = posts.filter(post => post.category === 'Artikel' && post.status === 'published');
+        const articlesList = posts.filter(post => (post.template_type === 'Artikel' || post.category === 'Artikel') && post.status === 'published');
         setArticlesData(articlesList);
       } catch (error) {
         console.error("Gagal mengambil data artikel:", error);

@@ -29,7 +29,7 @@ const About = () => {
 
   const headline = heroData?.headline || "UMKM Sentra Kreasi Bandung";
   const subHeadline = heroData?.sub_headline || "UMKM Sentra Kreasi Bandung didirikan pada tahun 2018 sebagai wadah untuk memperkuat dan mempromosikan karya dan kreasi UMKM di Kabupaten Bandung. Kami berkomitmen untuk membantu para pengusaha lokal mengembangkan bisnis mereka dan memperkenalkan produk-produk unik Kabupaten Bandung ke pasar yang lebih luas.";
-  const bgImage = heroData?.background_image || "https://sentrakreasi.org/_astro/kegiatan._9Pme9Eu_Z26Dj3w.webp";
+  const bgImage = heroData?.background_image || "https://res.cloudinary.com/de6wgrkmh/image/upload/v1777705067/uni-inside-cms/gc2yung7lzgvwxzmzcht.jpg";
 
   const words = headline.split(' ');
   const lastWord = words.length > 1 ? words.pop() : '';
@@ -132,7 +132,7 @@ const About = () => {
             <div className="absolute -inset-4 bg-primary/5 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative aspect-[21/9] md:aspect-[3/1] rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl">
               <img 
-                src="https://sentrakreasi.org/_astro/about.5YO-U3_e_Z184lvk.webp" 
+                src="https://res.cloudinary.com/de6wgrkmh/image/upload/v1777705067/uni-inside-cms/gc2yung7lzgvwxzmzcht.jpg" 
                 alt="Aktivitas Sentra Kreasi" 
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 dark:opacity-100"
               />

@@ -16,7 +16,7 @@ const ActivityDetail = () => {
       try {
         setLoading(true);
         const posts = await fetchPosts();
-        const events = posts.filter(post => post.category === 'Event' && post.status === 'published');
+        const events = posts.filter(post => (post.template_type === 'Event' || post.category === 'Event') && post.status === 'published');
         
         const currentActivity = events.find(a => a.slug === id);
         if (currentActivity) {

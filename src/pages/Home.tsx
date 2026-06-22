@@ -17,7 +17,7 @@ import { fetchPages, fetchPosts, CmsPage, CmsPost, fixDriveUrl, parseContent } f
 const Hero = ({ data }: { data?: any }) => {
   const headline = data?.headline || "Komunitas Kampung Digital Sentra Kreasi";
   const subHeadline = data?.sub_headline || "Kabupaten Bandung pada awalnya merupakan sebuah tempat/ komunitas dimana para pelaku UKM dari Kecamatan Pameungpeuk dan sekitarnya (Baleendah, Arjasari dan Banjaran) berkumpul.";
-  const bgImage = data?.background_image || "https://sentrakreasi.org/_astro/bg.DyT21dKi_Z1WHrvR.webp";
+  const bgImage = data?.background_image || "https://res.cloudinary.com/de6wgrkmh/image/upload/v1777705067/uni-inside-cms/gc2yung7lzgvwxzmzcht.jpg";
 
   const words = headline.split(' ');
   const lastTwoWords = words.length > 2 ? words.splice(-2).join(' ') : '';
@@ -382,11 +382,11 @@ const Home = () => {
           setPageData(homePage);
         }
 
-        const events = posts.filter(post => post.category === 'Event' && post.status === 'published');
+        const events = posts.filter(post => (post.template_type === 'Event' || post.category === 'Event') && post.status === 'published');
         events.sort((a, b) => b.id - a.id); // Terbesar (terbaru) di atas
         setLatestEvents(events);
 
-        const products = posts.filter(post => post.category === 'Produk' && post.status === 'published');
+        const products = posts.filter(post => (post.template_type === 'Produk' || post.category === 'Produk') && post.status === 'published');
         products.sort((a, b) => b.id - a.id);
         setLatestProducts(products);
       } catch (error) {

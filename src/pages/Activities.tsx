@@ -20,7 +20,7 @@ const Activities = () => {
           setPageData(activitiesPage);
         }
 
-        const events = posts.filter(post => post.category === 'Event' && post.status === 'published');
+        const events = posts.filter(post => (post.template_type === 'Event' || post.category === 'Event') && post.status === 'published');
         setActivitiesPosts(events);
       } catch (error) {
         console.error("Gagal mengambil data kegiatan:", error);

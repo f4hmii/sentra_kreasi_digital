@@ -16,6 +16,7 @@ export interface CmsPost {
   title: string;
   slug: string;
   category?: string;
+  template_type?: string; // Field aktual dari API CMS
   excerpt?: string;
   content: any;
   status: string;

@@ -15,7 +15,7 @@ const ArticleDetail = () => {
       try {
         setLoading(true);
         const posts = await fetchPosts();
-        const articlesList = posts.filter(post => post.category === 'Artikel' && post.status === 'published');
+        const articlesList = posts.filter(post => (post.template_type === 'Artikel' || post.category === 'Artikel') && post.status === 'published');
         const currentArticle = articlesList.find(a => a.slug === id);
         
         if (currentArticle) {

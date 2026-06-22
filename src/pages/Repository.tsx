@@ -25,7 +25,7 @@ const Repository = () => {
     const loadTemplates = async () => {
       try {
         const posts = await fetchPosts();
-        const templatePosts = posts.filter(post => post.category === 'Template' && post.status === 'published');
+        const templatePosts = posts.filter(post => (post.template_type === 'Template' || post.category === 'Template') && post.status === 'published');
         
         const fixDriveUrl = (url: string) => {
           if (!url) return '';
